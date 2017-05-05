@@ -1,3 +1,4 @@
 main\java\spring\mongo\app\App.class
+main\java\spring\mongo\config\MongoConfig.class
 com\jj\repository\UserRepository.class
 main\java\spring\mongo\model\JJUser.class
