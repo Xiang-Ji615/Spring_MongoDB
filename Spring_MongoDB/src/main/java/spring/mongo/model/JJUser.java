@@ -1,5 +1,8 @@
 package main.java.spring.mongo.model;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "User")
 public class JJUser {
 
 	String id;
