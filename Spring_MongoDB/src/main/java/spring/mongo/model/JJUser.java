@@ -3,11 +3,11 @@ package main.java.spring.mongo.model;
 import java.util.Date;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.DateTimeFormat.ISO;
 
-@Document(collection = "Users")
+
+
 public class JJUser {
 
 	@Id
