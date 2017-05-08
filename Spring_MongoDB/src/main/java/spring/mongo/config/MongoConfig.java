@@ -22,7 +22,7 @@ public class MongoConfig extends AbstractMongoConfiguration{
 	@Override
 	public Mongo mongo() throws Exception {
 		// TODO Auto-generated method stub
-		Mongo ret = new MongoClient(new ServerAddress("127.0.0.1", 27017), Arrays.asList(MongoCredential.createCredential("admin", "test", "password".toCharArray())));
+		Mongo ret = new MongoClient(new ServerAddress("127.0.0.1", 27017), Arrays.asList(MongoCredential.createCredential("admin", "admin", "admin".toCharArray())));
 		return ret;
 	}
 
