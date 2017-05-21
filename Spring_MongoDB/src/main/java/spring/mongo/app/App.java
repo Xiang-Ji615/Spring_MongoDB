@@ -1,10 +1,10 @@
 package main.java.spring.mongo.app;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
-import org.omg.CORBA.DATA_CONVERSION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -12,11 +12,14 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoOperations;
-import org.springframework.data.mongodb.core.query.BasicQuery;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
+import org.springframework.data.mongodb.gridfs.GridFsTemplate;
 import org.springframework.data.mongodb.repository.config.EnableMongoRepositories;
+
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
+import com.mongodb.gridfs.GridFSDBFile;
 
 import main.java.spring.mongo.model.JJUser;
 
@@ -27,6 +30,9 @@ public class App implements CommandLineRunner {
 	
 	@Autowired
 	MongoOperations mongoTemplate;
+	
+	@Autowired
+	GridFsTemplate gridFsTemplate;
 	
 	public static void main(String[] args) throws Exception {
 		SpringApplication app = new SpringApplication(App.class);
@@ -83,6 +89,37 @@ public class App implements CommandLineRunner {
 //		Update update = new Update();
 //		update.set("createDate", new Date());
 //		mongoTemplate.upsert(query, update, JJUser.class);
+		
+		//Savefile
+		DBObject metaData = new BasicDBObject();
+		metaData.put("extra1", "anything 1");
+		metaData.put("extra2", "anything 2");
+		InputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream("C:\\MongoDB\\Files\\JJTestFile1.txt");
+			gridFsTemplate.store(inputStream, "JJFile.txt", "txt", metaData);
+		}
+		catch (Exception e) {
+			// TODO: handle exception
+		}
+		
+		//ReadFile
+		List<GridFSDBFile> result = gridFsTemplate.find(
+	               new Query().addCriteria(Criteria.where("filename").is("JJFile.txt")));
+
+		for (GridFSDBFile file : result) {
+			try {
+				System.out.println(file.getFilename());
+				System.out.println(file.getContentType());
+
+				//save as another image
+				file.writeTo("C:\\MongoDB\\Files\\JJTestFile2.txt");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		
 		System.out.println("works");
 	}
 
